@@ -1,0 +1,474 @@
+{% extends 'recipes/base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block title %}Edit Recipe: {{ form.instance.title }} | RecipeSHARE{% endblock %}
+
+{% block content %}
+<style>
+    /* Premium Edit Recipe Form Styling */
+    .text-orange {
+        color: #ff7f50 !important;
+    }
+    
+    .bg-orange-light {
+        background-color: rgba(255, 127, 80, 0.08) !important;
+    }
+
+    .form-card {
+        border: none;
+        border-radius: 20px;
+        background-color: white;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+        overflow: hidden;
+        max-width: 1100px;
+        margin: 10px auto 40px auto;
+        border: 1px solid rgba(0, 0, 0, 0.03);
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, #fffcf9 0%, #fff3e0 100%);
+        padding: 35px 40px;
+        border-bottom: 1px solid rgba(255, 159, 67, 0.15);
+    }
+
+    .form-header-icon {
+        width: 54px;
+        height: 54px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #ff9f43, #ff7f50);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        box-shadow: 0 5px 15px rgba(255, 159, 67, 0.3);
+    }
+
+    .form-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .form-subtitle {
+        font-size: 0.95rem;
+        color: #64748b;
+        margin-top: 4px;
+    }
+
+    .form-body {
+        padding: 40px;
+    }
+
+    .form-field-label {
+        font-weight: 700;
+        color: #334155;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .form-control-premium {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 1rem;
+        font-weight: 500;
+        color: #1e293b;
+        background-color: #f8fafc;
+        transition: all 0.3s ease;
+        width: 100%;
+        display: block;
+    }
+
+    .form-control-premium:focus {
+        border-color: #ff9f43;
+        background-color: white;
+        box-shadow: 0 0 0 4px rgba(255, 159, 67, 0.15);
+        outline: none;
+    }
+
+    textarea.form-control-premium {
+        min-height: 120px;
+        resize: vertical;
+        line-height: 1.5;
+    }
+
+    /* File Input Dropzone Styling */
+    .file-input-wrapper {
+        border: 2px dashed #ff9f43;
+        border-radius: 16px;
+        min-height: 220px;
+        background-color: #fffdfb;
+        position: relative;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        text-align: center;
+        overflow: hidden;
+        padding: 20px;
+    }
+
+    .file-input-wrapper:hover, .file-input-wrapper.highlight {
+        border-color: #ff7f50;
+        background-color: #fff8f0;
+    }
+
+    .file-input-wrapper input[type="file"] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 5;
+    }
+
+    .file-input-preview-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 3;
+        background-color: #f1f5f9;
+    }
+
+    .file-input-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .preview-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(30, 41, 59, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 4;
+        pointer-events: none;
+    }
+
+    .file-input-wrapper:hover .preview-overlay {
+        opacity: 1;
+    }
+
+    /* Guidelines card */
+    .guidelines-box {
+        background-color: #f8fafc;
+        border-radius: 14px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .badge-number {
+        background-color: rgba(255, 159, 67, 0.15);
+        color: #e67e22;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .badge-warning-light {
+        background-color: rgba(255, 159, 67, 0.1);
+        color: #e67e22;
+    }
+
+    /* Custom buttons styling */
+    .btn-save-premium {
+        background: linear-gradient(135deg, #ff9f43, #ff7f50);
+        color: white !important;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 30px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 159, 67, 0.2);
+        cursor: pointer;
+    }
+
+    .btn-save-premium:hover {
+        opacity: 0.95;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(255, 159, 67, 0.35);
+    }
+
+    .btn-cancel-premium {
+        background: #f1f5f9;
+        color: #475569;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-cancel-premium:hover {
+        background: #e2e8f0;
+        color: #1e293b;
+        text-decoration: none;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+    }
+
+    @media (min-width: 992px) {
+        .border-right-lg {
+            border-right: 1px solid #e2e8f0;
+        }
+    }
+</style>
+
+<div class="container my-4">
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-transparent p-0 mb-4" style="font-size: 0.9rem;">
+            <li class="breadcrumb-item"><a href="{% url 'recipe_list' %}" class="text-orange" style="font-weight: 500;"><i class="fas fa-home mr-1"></i>Recipes</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'recipe_detail' form.instance.pk %}" class="text-orange" style="font-weight: 500;">{{ form.instance.title }}</a></li>
+            <li class="breadcrumb-item active text-secondary" aria-current="page" style="font-weight: 500;">Edit Recipe</li>
+        </ol>
+    </nav>
+
+    <div class="card form-card">
+        <!-- Form Header -->
+        <div class="form-header">
+            <div class="d-flex align-items-center gap-3">
+                <div class="form-header-icon mr-3">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <div>
+                    <h2 class="form-title">Edit Recipe</h2>
+                    <p class="form-subtitle">Make improvements or updates to your shared recipe below.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Body -->
+        <div class="form-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <!-- Left Column: Cover Image & Guidelines -->
+                    <div class="col-lg-5 mb-4 mb-lg-0 border-right-lg">
+                        <div class="pr-lg-3">
+                            <div class="form-group mb-4">
+                                <label class="form-field-label">
+                                    <i class="fas fa-image mr-2 text-orange"></i>Recipe Cover Image
+                                </label>
+                                
+                                <div class="file-input-wrapper" id="dropzone-wrapper">
+                                    <input type="file" name="image" id="id_image" accept="image/*">
+                                    
+                                    <!-- Image preview container -->
+                                    <div id="image-preview-container" class="file-input-preview-container" {% if form.instance.image %}style="display: block;"{% else %}style="display: none;"{% endif %}>
+                                        <img id="image-preview" class="file-input-preview" src="{% if form.instance.image %}{{ form.instance.image.url }}{% endif %}" alt="Recipe Preview">
+                                        <div class="preview-overlay">
+                                            <i class="fas fa-camera mr-2"></i> Change Cover Photo
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Dropzone placeholder text -->
+                                    <div id="dropzone-placeholder" {% if form.instance.image %}style="display: none;"{% endif %}>
+                                        <i class="fas fa-cloud-upload-alt text-orange mb-3" style="font-size: 3rem; animation: float 3s ease-in-out infinite;"></i>
+                                        <h5 class="font-weight-bold text-dark mb-1">Upload Photo</h5>
+                                        <p class="text-muted small mb-2">Drag & drop your cover photo here, or click to browse</p>
+                                        <span class="badge badge-pill badge-warning-light text-orange font-weight-bold px-3 py-1">Supports JPG, PNG, WEBP</span>
+                                    </div>
+                                </div>
+                                {% if form.image.errors %}
+                                    <div class="text-danger small mt-2">
+                                        {% for error in form.image.errors %}
+                                            <i class="fas fa-exclamation-circle mr-1"></i>{{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Cooking Guidelines Card -->
+                            <div class="guidelines-box p-4 mt-4">
+                                <h6 class="font-weight-bold text-dark mb-3">
+                                    <i class="fas fa-lightbulb mr-2 text-orange"></i>Tips for a Great Recipe
+                                </h6>
+                                <ul class="list-unstyled mb-0 small text-muted">
+                                    <li class="mb-3 d-flex align-items-start">
+                                        <span class="badge-number mr-2">1</span>
+                                        <span><strong>Catchy Title:</strong> Pick a simple, appetizing title that clearly names the dish.</span>
+                                    </li>
+                                    <li class="mb-3 d-flex align-items-start">
+                                        <span class="badge-number mr-2">2</span>
+                                        <span><strong>Descriptive Story:</strong> Share a quick sentence about what makes this recipe unique or who loves it.</span>
+                                    </li>
+                                    <li class="mb-3 d-flex align-items-start">
+                                        <span class="badge-number mr-2">3</span>
+                                        <span><strong>Detailed Ingredients:</strong> Put each ingredient on its own line. Use clear measurements (e.g. 1 tbsp, 200g).</span>
+                                    </li>
+                                    <li class="d-flex align-items-start">
+                                        <span class="badge-number mr-2">4</span>
+                                        <span><strong>Step-by-Step Instructions:</strong> Break the process down logically. Keep instructions numbered and easy to follow.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Text fields -->
+                    <div class="col-lg-7">
+                        <div class="pl-lg-3">
+                            <!-- Title Field -->
+                            <div class="form-group mb-4">
+                                <label for="id_title" class="form-field-label">
+                                    <i class="fas fa-heading mr-2 text-orange"></i>Recipe Title
+                                </label>
+                                {% render_field form.title class="form-control form-control-premium" placeholder="e.g. Grandma's Famous Lasagna" %}
+                                {% if form.title.errors %}
+                                    <div class="text-danger small mt-2">
+                                        {% for error in form.title.errors %}
+                                            <i class="fas fa-exclamation-circle mr-1"></i>{{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Description Field -->
+                            <div class="form-group mb-4">
+                                <label for="id_description" class="form-field-label">
+                                    <i class="fas fa-quote-left mr-2 text-orange"></i>Description / Story
+                                </label>
+                                {% render_field form.description class="form-control form-control-premium" placeholder="e.g. A rich, classic Italian lasagna layered with savory meat sauce, creamy ricotta, and melted mozzarella. Handed down through generations." rows="3" %}
+                                {% if form.description.errors %}
+                                    <div class="text-danger small mt-2">
+                                        {% for error in form.description.errors %}
+                                            <i class="fas fa-exclamation-circle mr-1"></i>{{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Ingredients Field -->
+                            <div class="form-group mb-4">
+                                <label for="id_ingredients" class="form-field-label">
+                                    <i class="fas fa-pepper-hot mr-2 text-orange"></i>Ingredients <span class="text-muted font-weight-normal ml-1">(one per line)</span>
+                                </label>
+                                {% render_field form.ingredients class="form-control form-control-premium" placeholder="e.g.&#10;- 1 lb lean ground beef&#10;- 12 dry lasagna noodles&#10;- 2 cups ricotta cheese&#10;- 2 cans tomato sauce" rows="5" %}
+                                {% if form.ingredients.errors %}
+                                    <div class="text-danger small mt-2">
+                                        {% for error in form.ingredients.errors %}
+                                            <i class="fas fa-exclamation-circle mr-1"></i>{{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Instructions Field -->
+                            <div class="form-group mb-4">
+                                <label for="id_instructions" class="form-field-label">
+                                    <i class="fas fa-tasks mr-2 text-orange"></i>Instructions / Steps
+                                </label>
+                                {% render_field form.instructions class="form-control form-control-premium" placeholder="e.g.&#10;1. Cook the ground beef over medium heat until browned, then stir in tomato sauce and simmer for 15 minutes.&#10;2. Cook the lasagna noodles in boiling water for 8 minutes.&#10;3. Assemble the layers in a baking dish starting with sauce, then noodles, then ricotta cheese and mozzarella. Repeat layers.&#10;4. Bake at 375°F for 30 minutes until bubbling." rows="6" %}
+                                {% if form.instructions.errors %}
+                                    <div class="text-danger small mt-2">
+                                        {% for error in form.instructions.errors %}
+                                            <i class="fas fa-exclamation-circle mr-1"></i>{{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
+                                <a href="{% url 'recipe_detail' form.instance.pk %}" class="btn btn-cancel-premium">
+                                    <i class="fas fa-times mr-2"></i>Cancel
+                                </a>
+                                <button type="submit" class="btn btn-save-premium">
+                                    <i class="fas fa-check-circle mr-2"></i>Update Recipe
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('id_image');
+        const previewContainer = document.getElementById('image-preview-container');
+        const previewImage = document.getElementById('image-preview');
+        const dropzonePlaceholder = document.getElementById('dropzone-placeholder');
+        const wrapper = document.getElementById('dropzone-wrapper');
+
+        if (fileInput) {
+            // Preview selected file
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        previewImage.src = event.target.result;
+                        previewContainer.style.display = 'block';
+                        dropzonePlaceholder.style.display = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Drag and drop styles
+            ['dragenter', 'dragover'].forEach(eventName => {
+                wrapper.addEventListener(eventName, function(e) {
+                    e.preventDefault();
+                    wrapper.classList.add('highlight');
+                }, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                wrapper.addEventListener(eventName, function(e) {
+                    e.preventDefault();
+                    wrapper.classList.remove('highlight');
+                }, false);
+            });
+
+            wrapper.addEventListener('drop', function(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    // Trigger change to load the image preview
+                    const event = new Event('change');
+                    fileInput.dispatchEvent(event);
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

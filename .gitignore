@@ -1,0 +1,12 @@
+# Django .gitignore
+*.py[cod]
+*$py.class
+__pycache__/
+.venv/
+db.sqlite3
+media/
+staticfiles/
+.env
+.idea/
+.vscode/
+.DS_Store
