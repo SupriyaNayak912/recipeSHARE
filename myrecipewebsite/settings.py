@@ -187,9 +187,8 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+_static_dir = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [_static_dir] if os.path.isdir(_static_dir) else []
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -223,6 +222,5 @@ else:
         },
     }
 
-
-
-
+# Backwards-compatibility shim for django-cloudinary-storage (it reads the old setting)
+STATICFILES_STORAGE = STORAGES['staticfiles']['BACKEND']
