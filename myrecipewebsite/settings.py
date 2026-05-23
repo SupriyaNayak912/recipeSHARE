@@ -113,8 +113,7 @@ WSGI_APPLICATION = 'myrecipewebsite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-import dj_database_url
-
+# Use individual env vars for production database (avoids URL parsing issues)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -122,27 +121,16 @@ DATABASES = {
     }
 }
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
-if DATABASE_URL:
-    try:
-        DATABASES['default'] = dj_database_url.parse(
-            DATABASE_URL,
-            conn_max_age=600,
-            conn_health_checks=True,
-        )
-    except Exception:
-        # If parsing fails, manually construct the database config
-        # This handles Supabase URLs with special characters in passwords
-        from urllib.parse import urlparse
-        parsed = urlparse(DATABASE_URL)
-        DATABASES['default'] = {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': parsed.path.lstrip('/'),
-            'USER': parsed.username,
-            'PASSWORD': parsed.password,
-            'HOST': parsed.hostname,
-            'PORT': parsed.port or 5432,
-        }
+DB_HOST = os.environ.get('DB_HOST')
+if DB_HOST:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'postgres'),
+        'USER': os.environ.get('DB_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST': DB_HOST,
+        'PORT': os.environ.get('DB_PORT', '5432'),
+    }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.your_email_host.com'
