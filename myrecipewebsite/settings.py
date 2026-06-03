@@ -115,6 +115,8 @@ WSGI_APPLICATION = 'myrecipewebsite.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 # Use individual env vars for production database (avoids URL parsing issues)
+import dj_database_url
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -122,16 +124,24 @@ DATABASES = {
     }
 }
 
-DB_HOST = os.environ.get('DB_HOST')
-if DB_HOST:
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'postgres'),
-        'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
-        'HOST': DB_HOST,
-        'PORT': os.environ.get('DB_PORT', '5432'),
-    }
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES['default'] = dj_database_url.config(
+        default=DATABASE_URL,
+        conn_max_age=600,
+        ssl_require=True
+    )
+else:
+    DB_HOST = os.environ.get('DB_HOST')
+    if DB_HOST:
+        DATABASES['default'] = {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DB_NAME', 'postgres'),
+            'USER': os.environ.get('DB_USER', 'postgres'),
+            'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+            'HOST': DB_HOST,
+            'PORT': os.environ.get('DB_PORT', '5432'),
+        }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.your_email_host.com'
