@@ -142,9 +142,6 @@
                         <a class="nav-link nav-link-premium" href="{% url 'recipe_create' %}"><i class="fas fa-plus-circle mr-1"></i>Add Recipe</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-link-premium" href="{% url 'recipe_list' %}#ai-finder"><i class="fas fa-magic mr-1"></i>AI Finder</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link nav-link-premium" href="{% url 'saved_recipes' %}"><i class="fas fa-bookmark mr-1"></i>Saved Recipes</a>
                     </li>
                     {% if user.is_authenticated %}

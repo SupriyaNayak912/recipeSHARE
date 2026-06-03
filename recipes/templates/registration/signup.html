@@ -3,21 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - recipeSHARE</title>
+    <title>Sign Up - RecipeSHARE</title>
     {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
 </head>
 <body>
     <div class="signup-container">
         <div class="signup-form">
             <div class="signup-brand">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-egg-fried" viewBox="0 0 16 16">
-                  <path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-                  <path d="M13.997 5.17a5 5 0 0 0-8.101-4.09A5 5 0 0 0 1.28 9.342a5 5 0 0 0 8.336 5.109 3.5 3.5 0 0 0 5.201-4.065 3.001 3.001 0 0 0-.822-5.216zm-1-.034a1 1 0 0 0 .668.977 2.001 2.001 0 0 1 1.947 2.339 2.5 2.5 0 0 1-3.715 2.905 1 1 0 0 0-1.562.69 4 4 0 0 1-6.67-4.087 1 1 0 0 0-.224-.963 4 4 0 0 1 3.02-6.838 1 1 0 0 0 .89-.53 4 4 0 0 1 6.584 2.188 1 1 0 0 0 .977.668z"/>
-                </svg>
-                <span>recipeSHARE</span>
+                <i class="fas fa-utensils brand-logo-icon"></i>
+                <span class="brand-name-main">Recipe<span class="brand-name-sub">SHARE</span></span>
             </div>
-            <h2 class="signup-title">Create Account</h2>
+            <h2 class="signup-title" style="font-size: 20px; font-weight: 600; text-align: center; margin-bottom: 24px; color: #595959;">Create Account</h2>
 
             {% if form.non_field_errors %}
             <div class="error-summary">
