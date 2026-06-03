@@ -25,14 +25,16 @@ class CustomUserCreationForm(UserCreationForm):
         label="Password",
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Password'
+            'placeholder': 'Password',
+            'style': 'padding-right: 40px;',
         })
     )
     password2 = forms.CharField(
         label="Password confirmation",
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Confirm Password'
+            'placeholder': 'Confirm Password',
+            'style': 'padding-right: 40px;',
         })
     )
 

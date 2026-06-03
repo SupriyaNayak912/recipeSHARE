@@ -1,25 +1,129 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Sign Up - recipeSHARE</title>
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
 </head>
 <body>
     <div class="signup-container">
         <div class="signup-form">
-            <h2 class="signup-title">Sign up</h2>
+            <div class="signup-brand">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-egg-fried" viewBox="0 0 16 16">
+                  <path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                  <path d="M13.997 5.17a5 5 0 0 0-8.101-4.09A5 5 0 0 0 1.28 9.342a5 5 0 0 0 8.336 5.109 3.5 3.5 0 0 0 5.201-4.065 3.001 3.001 0 0 0-.822-5.216zm-1-.034a1 1 0 0 0 .668.977 2.001 2.001 0 0 1 1.947 2.339 2.5 2.5 0 0 1-3.715 2.905 1 1 0 0 0-1.562.69 4 4 0 0 1-6.67-4.087 1 1 0 0 0-.224-.963 4 4 0 0 1 3.02-6.838 1 1 0 0 0 .89-.53 4 4 0 0 1 6.584 2.188 1 1 0 0 0 .977.668z"/>
+                </svg>
+                <span>recipeSHARE</span>
+            </div>
+            <h2 class="signup-title">Create Account</h2>
+
+            {% if form.non_field_errors %}
+            <div class="error-summary">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
             <form method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
+                
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}">Username</label>
+                    <div class="input-wrapper">
+                        {{ form.username }}
+                    </div>
+                    {% if form.username.errors %}
+                        <span class="error-text">{{ form.username.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">Email Address</label>
+                    <div class="input-wrapper">
+                        {{ form.email }}
+                    </div>
+                    {% if form.email.errors %}
+                        <span class="error-text">{{ form.email.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.password1.id_for_label }}">Password</label>
+                    <div class="input-wrapper password-wrapper">
+                        {{ form.password1 }}
+                        <span class="password-toggle" id="togglePassword1" title="Show/Hide Password">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                              <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                              <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                            </svg>
+                        </span>
+                    </div>
+                    {% if form.password1.errors %}
+                        <span class="error-text">{{ form.password1.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+                    <div class="input-wrapper password-wrapper">
+                        {{ form.password2 }}
+                        <span class="password-toggle" id="togglePassword2" title="Show/Hide Password">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                              <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                              <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                            </svg>
+                        </span>
+                    </div>
+                    {% if form.password2.errors %}
+                        <span class="error-text">{{ form.password2.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
                 <button type="submit" class="signup-button">Sign Up</button>
             </form>
-            <p class="login-link-container" style="margin-top: 15px; font-size: 14px; color: #8e8e8e; text-align: center;">
-                Already have an account? <a href="{% url 'account_login' %}" style="color: #3897f0; text-decoration: none; font-weight: bold;">Log in</a>
+
+            <p class="login-link-container">
+                Already have an account? <a href="{% url 'account_login' %}" class="login-link">Log in</a>
             </p>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            function setupPasswordToggle(toggleId, inputId) {
+                const toggle = document.querySelector(toggleId);
+                const input = document.querySelector(inputId);
+
+                if (toggle && input) {
+                    toggle.addEventListener('click', function () {
+                        const isPassword = input.getAttribute('type') === 'password';
+                        input.setAttribute('type', isPassword ? 'text' : 'password');
+                        
+                        if (isPassword) {
+                            toggle.innerHTML = `
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                  <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a8 8 0 0 0-2.79.513L9.473 5.2A4.8 4.8 0 0 1 8 6.2a4.8 4.8 0 0 1-4.8-4.8 4.8 4.8 0 0 1 .53-2.188L.73 1.582a.5.5 0 1 0-.73.682l1.249 1.25c-1.35 1.54-2.249 3.486-2.249 3.486s3 5.5 8 5.5a8 8 0 0 0 3.738-.91l1.24 1.241a.5.5 0 0 0 .707-.707l-1.378-1.377zM1 8c0-.1.01-.2.03-.3l1.83 1.83c-.56-.63-1.07-1.37-1.86-1.53zm10.586 1.862-1.382-1.382A2.5 2.5 0 0 0 8 5.5a2.5 2.5 0 0 0-1.862.604l-1.382-1.382A3.5 3.5 0 0 1 8 4.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-.914 1.862zm-2.062-2.062L6.172 6.172A2.5 2.5 0 0 0 8 5.5a2.5 2.5 0 0 0 1.524 2.3zM15 8c0 .1-.01.2-.03.3l-1.83-1.83c.56.63 1.07 1.37 1.86 1.53z"/>
+                                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                </svg>
+                            `;
+                        } else {
+                            toggle.innerHTML = `
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                                  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                                </svg>
+                            `;
+                        }
+                    });
+                }
+            }
+
+            setupPasswordToggle('#togglePassword1', 'input[name="password1"]');
+            setupPasswordToggle('#togglePassword2', 'input[name="password2"]');
+        });
+    </script>
 </body>
 </html>
