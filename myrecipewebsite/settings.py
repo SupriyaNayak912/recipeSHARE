@@ -52,10 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cloudinary_storage',
     'recipes',
-    'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
     'widget_tweaks',
     'image_uploader_widget',
     'cloudinary',
@@ -64,7 +60,6 @@ INSTALLED_APPS = [
 AUTHENTICATION_BACKENDS = (
     'recipes.backends.EmailOrUsernameModelBackend',
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
 )
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.your_email_host.com'
@@ -72,8 +67,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'your_email@example.com'
 EMAIL_HOST_PASSWORD = 'your_email_password'
-
-SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -87,7 +80,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'myrecipewebsite.urls'
@@ -150,7 +142,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'supriyasn912@gmail.com'
 EMAIL_HOST_PASSWORD = 'Nayak@912'
 
-ACCOUNT_EMAIL_VERIFICATION = "none"
+
 
 
 # Password validation
