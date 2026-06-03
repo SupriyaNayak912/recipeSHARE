@@ -209,8 +209,16 @@ def add_rating_to_recipe(request, pk):
     return render(request, 'recipes/add_rating_to_recipe.html', {'form': form, 'recipe': recipe})
 
 def search_recipes(request):
-    query = request.GET.get('q')
-    recipes = Recipe.objects.filter(title__icontains=query) | Recipe.objects.filter(description__icontains=query)
+    from django.db.models import Q
+    query = request.GET.get('q', '').strip()
+    if query:
+        recipes = Recipe.objects.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query) |
+            Q(ingredients__icontains=query)
+        ).distinct()
+    else:
+        recipes = Recipe.objects.all()
     return render(request, 'recipes/recipe_list.html', {'recipes': recipes, 'query': query})
 
 def about_us(request):

@@ -250,7 +250,7 @@
     <!-- Breadcrumbs -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent p-0 mb-4" style="font-size: 0.9rem;">
-            <li class="breadcrumb-item"><a href="{% url 'recipe_list' %}" class="text-orange" style="font-weight: 500;"><i class="fas fa-home mr-1"></i>Recipes</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'recipe_list' %}" class="text-orange" style="font-weight: 500;">Recipes</a></li>
             <li class="breadcrumb-item"><a href="{% url 'recipe_detail' form.instance.pk %}" class="text-orange" style="font-weight: 500;">{{ form.instance.title }}</a></li>
             <li class="breadcrumb-item active text-secondary" aria-current="page" style="font-weight: 500;">Edit Recipe</li>
         </ol>
@@ -259,14 +259,9 @@
     <div class="card form-card">
         <!-- Form Header -->
         <div class="form-header">
-            <div class="d-flex align-items-center gap-3">
-                <div class="form-header-icon mr-3">
-                    <i class="fas fa-edit"></i>
-                </div>
-                <div>
-                    <h2 class="form-title">Edit Recipe</h2>
-                    <p class="form-subtitle">Make improvements or updates to your shared recipe below.</p>
-                </div>
+            <div>
+                <h2 class="form-title">Edit Recipe</h2>
+                <p class="form-subtitle">Make improvements or updates to your shared recipe below.</p>
             </div>
         </div>
 
@@ -281,7 +276,7 @@
                         <div class="pr-lg-3">
                             <div class="form-group mb-4">
                                 <label class="form-field-label">
-                                    <i class="fas fa-image mr-2 text-orange"></i>Recipe Cover Image
+                                    Recipe Cover Image
                                 </label>
                                 
                                 <div class="file-input-wrapper" id="dropzone-wrapper">
@@ -291,13 +286,12 @@
                                     <div id="image-preview-container" class="file-input-preview-container" {% if form.instance.image %}style="display: block;"{% else %}style="display: none;"{% endif %}>
                                         <img id="image-preview" class="file-input-preview" src="{% if form.instance.image %}{{ form.instance.image.url }}{% endif %}" alt="Recipe Preview">
                                         <div class="preview-overlay">
-                                            <i class="fas fa-camera mr-2"></i> Change Cover Photo
+                                            Change Cover Photo
                                         </div>
                                     </div>
                                     
                                     <!-- Dropzone placeholder text -->
                                     <div id="dropzone-placeholder" {% if form.instance.image %}style="display: none;"{% endif %}>
-                                        <i class="fas fa-cloud-upload-alt text-orange mb-3" style="font-size: 3rem; animation: float 3s ease-in-out infinite;"></i>
                                         <h5 class="font-weight-bold text-dark mb-1">Upload Photo</h5>
                                         <p class="text-muted small mb-2">Drag & drop your cover photo here, or click to browse</p>
                                         <span class="badge badge-pill badge-warning-light text-orange font-weight-bold px-3 py-1">Supports JPG, PNG, WEBP</span>
@@ -306,7 +300,7 @@
                                 {% if form.image.errors %}
                                     <div class="text-danger small mt-2">
                                         {% for error in form.image.errors %}
-                                            <i class="fas fa-exclamation-circle mr-1"></i>{{ error }}
+                                            {{ error }}
                                         {% endfor %}
                                     </div>
                                 {% endif %}
@@ -315,7 +309,7 @@
                             <!-- Cooking Guidelines Card -->
                             <div class="guidelines-box p-4 mt-4">
                                 <h6 class="font-weight-bold text-dark mb-3">
-                                    <i class="fas fa-lightbulb mr-2 text-orange"></i>Tips for a Great Recipe
+                                    Tips for a Great Recipe
                                 </h6>
                                 <ul class="list-unstyled mb-0 small text-muted">
                                     <li class="mb-3 d-flex align-items-start">
@@ -345,13 +339,13 @@
                             <!-- Title Field -->
                             <div class="form-group mb-4">
                                 <label for="id_title" class="form-field-label">
-                                    <i class="fas fa-heading mr-2 text-orange"></i>Recipe Title
+                                    Recipe Title
                                 </label>
                                 {% render_field form.title class="form-control form-control-premium" placeholder="e.g. Grandma’s Famous Lasagna" %}
                                 {% if form.title.errors %}
                                     <div class="text-danger small mt-2">
                                         {% for error in form.title.errors %}
-                                            <i class="fas fa-exclamation-circle mr-1"></i>{{ error }}
+                                            {{ error }}
                                         {% endfor %}
                                     </div>
                                 {% endif %}
@@ -360,13 +354,13 @@
                             <!-- Description Field -->
                             <div class="form-group mb-4">
                                 <label for="id_description" class="form-field-label">
-                                    <i class="fas fa-quote-left mr-2 text-orange"></i>Description / Story
+                                    Description / Story
                                 </label>
                                 {% render_field form.description class="form-control form-control-premium" placeholder="e.g. A rich, classic Italian lasagna layered with savory meat sauce, creamy ricotta, and melted mozzarella. Handed down through generations." rows="3" %}
                                 {% if form.description.errors %}
                                     <div class="text-danger small mt-2">
                                         {% for error in form.description.errors %}
-                                            <i class="fas fa-exclamation-circle mr-1"></i>{{ error }}
+                                            {{ error }}
                                         {% endfor %}
                                     </div>
                                 {% endif %}
@@ -375,13 +369,13 @@
                             <!-- Ingredients Field -->
                             <div class="form-group mb-4">
                                 <label for="id_ingredients" class="form-field-label">
-                                    <i class="fas fa-pepper-hot mr-2 text-orange"></i>Ingredients <span class="text-muted font-weight-normal ml-1">(one per line)</span>
+                                    Ingredients <span class="text-muted font-weight-normal ml-1">(one per line)</span>
                                 </label>
                                 {% render_field form.ingredients class="form-control form-control-premium" placeholder="e.g.&#10;- 1 lb lean ground beef&#10;- 12 dry lasagna noodles&#10;- 2 cups ricotta cheese&#10;- 2 cans tomato sauce" rows="5" %}
                                 {% if form.ingredients.errors %}
                                     <div class="text-danger small mt-2">
                                         {% for error in form.ingredients.errors %}
-                                            <i class="fas fa-exclamation-circle mr-1"></i>{{ error }}
+                                            {{ error }}
                                         {% endfor %}
                                     </div>
                                 {% endif %}
@@ -390,13 +384,13 @@
                             <!-- Instructions Field -->
                             <div class="form-group mb-4">
                                 <label for="id_instructions" class="form-field-label">
-                                    <i class="fas fa-tasks mr-2 text-orange"></i>Instructions / Steps
+                                    Instructions / Steps
                                 </label>
                                 {% render_field form.instructions class="form-control form-control-premium" placeholder="e.g.&#10;1. Cook the ground beef over medium heat until browned, then stir in tomato sauce and simmer for 15 minutes.&#10;2. Cook the lasagna noodles in boiling water for 8 minutes.&#10;3. Assemble the layers in a baking dish starting with sauce, then noodles, then ricotta cheese and mozzarella. Repeat layers.&#10;4. Bake at 375°F for 30 minutes until bubbling." rows="6" %}
                                 {% if form.instructions.errors %}
                                     <div class="text-danger small mt-2">
                                         {% for error in form.instructions.errors %}
-                                            <i class="fas fa-exclamation-circle mr-1"></i>{{ error }}
+                                            {{ error }}
                                         {% endfor %}
                                     </div>
                                 {% endif %}
@@ -404,13 +398,16 @@
 
                             <!-- Actions -->
                             <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
-                                <a href="{% url 'recipe_detail' form.instance.pk %}" class="btn btn-cancel-premium">
-                                    <i class="fas fa-times mr-2"></i>Cancel
-                                </a>
-                                <button type="submit" class="btn btn-save-premium">
-                                    <i class="fas fa-check-circle mr-2"></i>Update Recipe
-                                </button>
+                                <a href="{% url 'recipe_detail' form.instance.pk %}" class="btn btn-cancel-premium">Cancel</a>
+                                <button type="submit" class="btn btn-save-premium">Update Recipe</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
                         </div>
                     </div>
                 </div>
