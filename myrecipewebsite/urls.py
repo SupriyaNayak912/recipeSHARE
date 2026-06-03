@@ -7,10 +7,12 @@ from django.contrib.auth import views as auth_views
 
 
 
+from recipes.forms import CustomAuthenticationForm
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/login/', auth_views.LoginView.as_view(), name='account_login'),
+    path('accounts/login/', auth_views.LoginView.as_view(authentication_form=CustomAuthenticationForm), name='account_login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(next_page='/'), name='account_logout'),
     path('accounts/signup/', recipe_views.signup, name='account_signup'),
     path('', include('recipes.urls')),

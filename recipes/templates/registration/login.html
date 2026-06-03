@@ -13,12 +13,71 @@
             <h2 class="login-title">Log in</h2>
             <form method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <p class="error-text" style="color: #ed4956; font-size: 13px; text-align: center; margin-bottom: 12px; font-weight: 500;">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+
+                <p>
+                    <label for="{{ form.username.id_for_label }}">Username or Email:</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <span class="error-text" style="color: #ed4956; font-size: 12px; display: block; margin-top: -5px; margin-bottom: 5px;">{{ form.username.errors.0 }}</span>
+                    {% endif %}
+                </p>
+
+                <p style="position: relative;">
+                    <label for="{{ form.password.id_for_label }}">Password:</label>
+                    <span style="display: block; position: relative;">
+                        {{ form.password }}
+                        <span id="togglePassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #8e8e8e; display: flex; align-items: center;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                              <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                              <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                            </svg>
+                        </span>
+                    </span>
+                    {% if form.password.errors %}
+                        <span class="error-text" style="color: #ed4956; font-size: 12px; display: block; margin-top: -5px; margin-bottom: 5px;">{{ form.password.errors.0 }}</span>
+                    {% endif %}
+                </p>
+
                 <button type="submit" class="login-button">Log In</button>
             </form>
             <p class="signup-link-container" style="margin-top: 15px; font-size: 14px; color: #8e8e8e; text-align: center;">
                 Don't have an account? <a href="{% url 'account_signup' %}" style="color: #3897f0; text-decoration: none; font-weight: bold;">Sign up</a>
             </p>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const togglePassword = document.querySelector('#togglePassword');
+                    const password = document.querySelector('input[name="password"]');
+
+                    if (togglePassword && password) {
+                        togglePassword.addEventListener('click', function () {
+                            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                            password.setAttribute('type', type);
+                            
+                            if (type === 'text') {
+                                togglePassword.innerHTML = `
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-slash" viewBox="0 0 16 16">
+                                      <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a8 8 0 0 0-2.79.513L9.473 5.2A4.8 4.8 0 0 1 8 6.2a4.8 4.8 0 0 1-4.8-4.8 4.8 4.8 0 0 1 .53-2.188L.73 1.582a.5.5 0 1 0-.73.682l1.249 1.25c-1.35 1.54-2.249 3.486-2.249 3.486s3 5.5 8 5.5a8 8 0 0 0 3.738-.91l1.24 1.241a.5.5 0 0 0 .707-.707l-1.378-1.377zM1 8c0-.1.01-.2.03-.3l1.83 1.83c-.56-.63-1.07-1.37-1.86-1.53zm10.586 1.862-1.382-1.382A2.5 2.5 0 0 0 8 5.5a2.5 2.5 0 0 0-1.862.604l-1.382-1.382A3.5 3.5 0 0 1 8 4.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-.914 1.862zm-2.062-2.062L6.172 6.172A2.5 2.5 0 0 0 8 5.5a2.5 2.5 0 0 0 1.524 2.3zM15 8c0 .1-.01.2-.03.3l-1.83-1.83c.56.63 1.07 1.37 1.86 1.53z"/>
+                                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    </svg>
+                                `;
+                            } else {
+                                togglePassword.innerHTML = `
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                      <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                                      <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                                    </svg>
+                                `;
+                            }
+                        });
+                    }
+                });
+            </script>
         </div>
     </div>
 </body>
