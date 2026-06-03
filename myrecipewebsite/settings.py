@@ -227,6 +227,9 @@ else:
 # Backwards-compatibility shim for django-cloudinary-storage (it reads the old setting)
 STATICFILES_STORAGE = STORAGES['staticfiles']['BACKEND']
 
+# Disable strict manifest checking to prevent build failures on missing files (e.g. Django Admin debug icons)
+WHITENOISE_MANIFEST_STRICT = False
+
 # Groq API Configuration
 GROQ_API_KEY = os.environ.get('GROQ_API_KEY', '')
 
