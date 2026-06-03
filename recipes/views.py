@@ -21,6 +21,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Recipe, SavedRecipe
 from django.contrib import messages
 from django.http import JsonResponse
+import requests
+import json
 
 @login_required
 def save_recipe(request, recipe_id):
@@ -219,6 +221,110 @@ def contact_us(request):
 
 def privacy_policy(request):
     return render(request, 'recipes/privacy_policy.html')
+
+
+@login_required
+def ai_recipe_finder_api(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST request required.'}, status=400)
+    
+    # Check if Groq API Key is configured
+    api_key = getattr(settings, 'GROQ_API_KEY', '')
+    if not api_key:
+        return JsonResponse({
+            'error': 'Groq API Key is not configured. Please add GROQ_API_KEY to your .env file.'
+        }, status=500)
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON request body.'}, status=400)
+
+    ingredients = data.get('ingredients', '').strip()
+    dietary_preference = data.get('dietary_preference', '').strip()
+
+    if not ingredients:
+        return JsonResponse({'error': 'Ingredients list is required.'}, status=400)
+
+    # Call Groq API
+    url = "https://api.groq.com/openai/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+
+    system_instruction = (
+        "You are a professional chef. Create 3 recipe suggestions based ONLY on the available ingredients "
+        "and the optional dietary preferences provided by the user. "
+        "The response MUST be a JSON object matching this schema exactly:\n"
+        "{\n"
+        "  \"recipes\": [\n"
+        "    {\n"
+        "      \"title\": \"string (name of the recipe)\",\n"
+        "      \"description\": \"string (short appetising description of the dish)\",\n"
+        "      \"ingredients\": [\n"
+        "        \"string (ingredient 1 with quantity)\",\n"
+        "        \"string (ingredient 2 with quantity)\"\n"
+        "      ],\n"
+        "      \"instructions\": [\n"
+        "        \"string (step 1)\",\n"
+        "        \"string (step 2)\"\n"
+        "      ]\n"
+        "    }\n"
+        "  ]\n"
+        "}\n"
+        "Ensure your response is raw valid JSON without markdown formatting backticks."
+    )
+
+    user_prompt = f"Available ingredients in my kitchen: {ingredients}"
+    if dietary_preference:
+        user_prompt += f"\nDietary preferences: {dietary_preference}"
+
+    payload = {
+        "model": "llama-3.3-70b-versatile",
+        "messages": [
+            {"role": "system", "content": system_instruction},
+            {"role": "user", "content": user_prompt}
+        ],
+        "response_format": {"type": "json_object"}
+    }
+
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=30)
+        response.raise_for_status()
+        result = response.json()
+        
+        choices = result.get('choices', [])
+        if not choices:
+            return JsonResponse({'error': 'No response choices returned from Groq.'}, status=502)
+        
+        content_str = choices[0].get('message', {}).get('content', '')
+        if not content_str:
+            return JsonResponse({'error': 'Empty content returned from Groq.'}, status=502)
+        
+        # Parse the JSON string from Groq content
+        recipe_data = json.loads(content_str)
+        
+        # Validate that we got a list of recipes with expected fields
+        recipes_list = recipe_data.get('recipes', [])
+        if not isinstance(recipes_list, list) or len(recipes_list) == 0:
+            return JsonResponse({'error': 'AI response did not return a valid list of recipes.'}, status=502)
+
+        for rec in recipes_list:
+            required_fields = ['title', 'description', 'ingredients', 'instructions']
+            if not all(field in rec for field in required_fields):
+                return JsonResponse({'error': 'AI response recipes did not match the expected schema.'}, status=502)
+
+        return JsonResponse(recipe_data)
+
+    except requests.exceptions.RequestException as e:
+        return JsonResponse({'error': f'Failed to contact Groq API: {str(e)}'}, status=502)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Failed to parse AI response as JSON.'}, status=502)
+    except Exception as e:
+        return JsonResponse({'error': f'An unexpected error occurred: {str(e)}'}, status=500)
+
+
 
 
 

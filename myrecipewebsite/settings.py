@@ -197,7 +197,9 @@ CLOUDINARY_CLOUD_NAME = os.environ.get('CLOUDINARY_CLOUD_NAME')
 CLOUDINARY_API_KEY = os.environ.get('CLOUDINARY_API_KEY')
 CLOUDINARY_API_SECRET = os.environ.get('CLOUDINARY_API_SECRET')
 
-if CLOUDINARY_CLOUD_NAME and CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET:
+USE_CLOUDINARY = os.environ.get('USE_CLOUDINARY', 'False').lower() == 'true'
+
+if USE_CLOUDINARY and CLOUDINARY_CLOUD_NAME and CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET:
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME': CLOUDINARY_CLOUD_NAME,
         'API_KEY': CLOUDINARY_API_KEY,
@@ -224,3 +226,7 @@ else:
 
 # Backwards-compatibility shim for django-cloudinary-storage (it reads the old setting)
 STATICFILES_STORAGE = STORAGES['staticfiles']['BACKEND']
+
+# Groq API Configuration
+GROQ_API_KEY = os.environ.get('GROQ_API_KEY', '')
+
