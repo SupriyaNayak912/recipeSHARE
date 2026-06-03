@@ -340,7 +340,7 @@
                                 <label for="id_title" class="form-field-label">
                                     Recipe Title
                                 </label>
-                                {% render_field form.title class="form-control form-control-premium" placeholder="e.g. Grandma’s Famous Lasagna" %}
+                                {% render_field form.title class="form-control form-control-premium" %}
                                 {% if form.title.errors %}
                                     <div class="text-danger small mt-2">
                                         {% for error in form.title.errors %}
@@ -355,7 +355,7 @@
                                 <label for="id_description" class="form-field-label">
                                     Description / Story
                                 </label>
-                                {% render_field form.description class="form-control form-control-premium" placeholder="e.g. A rich, classic Italian lasagna layered with savory meat sauce, creamy ricotta, and melted mozzarella. Handed down through generations." rows="3" %}
+                                {% render_field form.description class="form-control form-control-premium" rows="3" %}
                                 {% if form.description.errors %}
                                     <div class="text-danger small mt-2">
                                         {% for error in form.description.errors %}
@@ -370,7 +370,7 @@
                                 <label for="id_ingredients" class="form-field-label">
                                     Ingredients <span class="text-muted font-weight-normal ml-1">(one per line)</span>
                                 </label>
-                                {% render_field form.ingredients class="form-control form-control-premium" placeholder="e.g.&#10;- 1 lb lean ground beef&#10;- 12 dry lasagna noodles&#10;- 2 cups ricotta cheese&#10;- 2 cans tomato sauce" rows="5" %}
+                                {% render_field form.ingredients class="form-control form-control-premium" rows="5" %}
                                 {% if form.ingredients.errors %}
                                     <div class="text-danger small mt-2">
                                         {% for error in form.ingredients.errors %}
@@ -385,7 +385,7 @@
                                 <label for="id_instructions" class="form-field-label">
                                     Instructions / Steps
                                 </label>
-                                {% render_field form.instructions class="form-control form-control-premium" placeholder="e.g.&#10;1. Cook the ground beef over medium heat until browned, then stir in tomato sauce and simmer for 15 minutes.&#10;2. Cook the lasagna noodles in boiling water for 8 minutes.&#10;3. Assemble the layers in a baking dish starting with sauce, then noodles, then ricotta cheese and mozzarella. Repeat layers.&#10;4. Bake at 375°F for 30 minutes until bubbling." rows="6" %}
+                                {% render_field form.instructions class="form-control form-control-premium" rows="6" %}
                                 {% if form.instructions.errors %}
                                     <div class="text-danger small mt-2">
                                         {% for error in form.instructions.errors %}
